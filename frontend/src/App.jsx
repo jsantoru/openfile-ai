@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import GameHistory from './components/GameHistory'
+import GameAnalysis from './components/GameAnalysis'
 import './App.css'
 
 function App() {
@@ -9,6 +10,8 @@ function App() {
   const [games, setGames] = useState(null)
   const [loading, setLoading] = useState(false)
   const [loadingGames, setLoadingGames] = useState(false)
+  const [analysis, setAnalysis] = useState(null)
+  const [loadingAnalysis, setLoadingAnalysis] = useState(false)
   const [error, setError] = useState(null)
 
   const fetchArchives = async () => {
@@ -44,6 +47,7 @@ function App() {
     setLoadingGames(true)
     setError(null)
     setGames(null)
+    setAnalysis(null)
     setSelectedMonth(archiveUrl)
 
     try {
@@ -66,6 +70,42 @@ function App() {
       console.error('Error fetching games:', err)
     } finally {
       setLoadingGames(false)
+    }
+  }
+
+  const analyzeGames = async () => {
+    if (!games || !games.games || games.games.length === 0) {
+      setError('No games to analyze')
+      return
+    }
+
+    setLoadingAnalysis(true)
+    setError(null)
+
+    try {
+      const response = await fetch('http://localhost:8000/api/analyze', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username,
+          games: games.games
+        })
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.detail || `Failed to analyze games: ${response.statusText}`)
+      }
+
+      const data = await response.json()
+      setAnalysis(data.analysis)
+    } catch (err) {
+      setError(err.message || 'Failed to analyze games')
+      console.error('Error analyzing games:', err)
+    } finally {
+      setLoadingAnalysis(false)
     }
   }
 
@@ -181,7 +221,23 @@ function App() {
           </div>
         )}
 
-        {games && <GameHistory data={games} />}
+        {games && (
+          <>
+            <div className="analyze-section">
+              <button
+                onClick={analyzeGames}
+                disabled={loadingAnalysis}
+                className="analyze-button"
+              >
+                {loadingAnalysis ? 'Analyzing...' : 'Analyze with AI'}
+              </button>
+            </div>
+
+            <GameAnalysis analysis={analysis} loading={loadingAnalysis} />
+
+            <GameHistory data={games} />
+          </>
+        )}
       </div>
     </div>
   )

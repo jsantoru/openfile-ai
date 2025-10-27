@@ -189,3 +189,35 @@
   color: white;
   font-size: 1.125rem;
 }
+
+.analyze-section {
+  max-width: 80rem;
+  margin: 0 auto 2rem;
+  text-align: center;
+}
+
+.analyze-button {
+  padding: 1rem 2.5rem;
+  background: rgb(0, 222, 222);
+  color: rgb(15, 23, 42);
+  font-weight: 600;
+  font-size: 1.125rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 222, 222, 0.3);
+}
+
+.analyze-button:hover:not(:disabled) {
+  background: rgb(0, 190, 190);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 222, 222, 0.4);
+}
+
+.analyze-button:disabled {
+  background: rgb(75, 85, 99);
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}

@@ -59,7 +59,7 @@ function GameHistory({ data }) {
 
       <div className="games-grid">
         {filteredGames.map((game, index) => (
-          <GameCard key={index} game={game} username={data.username} />
+          <GameCard key={index} game={game} username={data.username} gameNumber={index + 1} />
         ))}
       </div>
     </div>

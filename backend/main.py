@@ -1,8 +1,16 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from services.chess_api import ChessComAPIService
+from services.openai_service import OpenAIAnalysisService
 from models import GameHistoryResponse, UserRequest
+from pydantic import BaseModel
+from typing import List, Dict, Any
 import logging
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -19,6 +27,19 @@ app.add_middleware(
 )
 
 chess_service = ChessComAPIService()
+
+# Initialize OpenAI service (will be None if API key not set)
+try:
+    openai_service = OpenAIAnalysisService()
+    logger.info("OpenAI service initialized successfully")
+except Exception as e:
+    openai_service = None
+    logger.warning(f"OpenAI service not available: {e}")
+
+
+class AnalysisRequest(BaseModel):
+    username: str
+    games: List[Dict[str, Any]]
 
 
 @app.get("/")
@@ -71,6 +92,32 @@ async def get_month_games(username: str, year: int, month: int):
         )
     except Exception as e:
         logger.error(f"Error fetching games for {username} {year}/{month}: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/analyze")
+async def analyze_games(request: AnalysisRequest):
+    """
+    Analyze games using OpenAI to identify recurring mistakes and provide actionable advice.
+
+    Args:
+        request: Contains username and list of games
+
+    Returns:
+        Analysis text with insights and recommendations
+    """
+    if not openai_service:
+        raise HTTPException(
+            status_code=503,
+            detail="OpenAI service not available. Please set OPENAI_API_KEY environment variable."
+        )
+
+    try:
+        logger.info(f"Analyzing {len(request.games)} games for {request.username}")
+        analysis = openai_service.analyze_games(request.games, request.username)
+        return {"analysis": analysis}
+    except Exception as e:
+        logger.error(f"Error analyzing games: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

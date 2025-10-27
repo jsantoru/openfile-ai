@@ -1,6 +1,6 @@
 import './GameCard.css'
 
-function GameCard({ game, username }) {
+function GameCard({ game, username, gameNumber }) {
   const isWhite = game.white_username.toLowerCase() === username.toLowerCase()
   const playerColor = isWhite ? 'white' : 'black'
   const opponentColor = isWhite ? 'black' : 'white'
@@ -71,6 +71,11 @@ function GameCard({ game, username }) {
       rel="noopener noreferrer"
       className="game-card"
     >
+      {gameNumber && (
+        <div className="game-number">
+          Game #{gameNumber}
+        </div>
+      )}
       <div className={`result-badge ${resultClass}`}>
         {isWin ? 'Win' : isDraw ? 'Draw' : 'Loss'}
       </div>

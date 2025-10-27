@@ -1,0 +1,144 @@
+.analysis-container {
+  max-width: 80rem;
+  margin: 0 auto 3rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 1rem;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.analysis-header-section {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid rgba(0, 222, 222, 0.3);
+}
+
+.analysis-title {
+  color: rgb(0, 222, 222);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.analysis-subtitle {
+  color: rgb(156, 163, 175);
+  font-size: 1rem;
+}
+
+.analysis-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  gap: 1rem;
+}
+
+.analysis-loading p {
+  color: white;
+  font-size: 1.125rem;
+}
+
+.analysis-subtext {
+  color: rgb(156, 163, 175);
+  font-size: 0.875rem;
+}
+
+.analysis-content {
+  color: rgb(209, 213, 219);
+  line-height: 1.7;
+}
+
+.analysis-header {
+  color: rgb(0, 222, 222);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.analysis-header:first-child {
+  margin-top: 0;
+}
+
+/* Highlight THE ONE MAIN THING section */
+.analysis-content h3:nth-of-type(2) {
+  color: rgb(0, 255, 255);
+  font-size: 1.5rem;
+  background: rgba(0, 222, 222, 0.1);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 2px solid rgb(0, 222, 222);
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.analysis-paragraph {
+  margin-bottom: 1rem;
+  color: rgb(209, 213, 219);
+}
+
+.analysis-list {
+  margin: 1rem 0 1.5rem 1.5rem;
+  padding-left: 0;
+}
+
+.analysis-list li {
+  margin-bottom: 0.75rem;
+  padding-left: 0.5rem;
+  position: relative;
+  color: rgb(209, 213, 219);
+  line-height: 1.6;
+}
+
+.analysis-list li::marker {
+  color: rgb(0, 222, 222);
+}
+
+.analysis-list li strong,
+.analysis-paragraph strong {
+  color: rgb(0, 222, 222);
+  font-weight: 600;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  height: 2rem;
+  width: 2rem;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner-circle {
+  opacity: 0.25;
+  stroke: rgb(0, 222, 222);
+}
+
+.spinner-path {
+  opacity: 0.75;
+  fill: rgb(0, 222, 222);
+}
+
+.game-link {
+  color: rgb(0, 222, 222);
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(0, 222, 222, 0.3);
+  transition: all 0.2s ease;
+}
+
+.game-link:hover {
+  color: rgb(0, 255, 255);
+  border-bottom-color: rgb(0, 222, 222);
+}

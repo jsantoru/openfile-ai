@@ -8,11 +8,25 @@
   transition: all 0.2s ease;
   cursor: pointer;
   text-decoration: none;
+  position: relative;
 }
 
 .game-card:hover {
   border-color: rgba(0, 222, 222, 0.5);
   transform: scale(1.05);
+}
+
+.game-number {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: rgba(0, 222, 222, 0.2);
+  color: rgb(0, 222, 222);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid rgba(0, 222, 222, 0.4);
 }
 
 .result-badge {
