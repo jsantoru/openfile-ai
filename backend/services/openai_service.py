@@ -272,6 +272,120 @@ The URL format should be markdown links: [Game #X](full_game_url). This makes it
 
         return prompt
 
+    def analyze_single_game(self, game: Dict[str, Any], username: str) -> str:
+        """
+        Analyze a single game and provide detailed coaching feedback.
+
+        Args:
+            game: Game dictionary
+            username: Username of the player
+
+        Returns:
+            Analysis text with specific move-by-move insights
+        """
+        # Determine player details
+        if "white_username" in game:
+            is_white = game.get("white_username", "").lower() == username.lower()
+            player_result = game.get("white_result" if is_white else "black_result", "")
+            opponent_username = game.get("black_username" if is_white else "white_username", "")
+            player_rating = game.get("white_rating" if is_white else "black_rating", 0)
+            opponent_rating = game.get("black_rating" if is_white else "white_rating", 0)
+        else:
+            white = game.get("white", {})
+            black = game.get("black", {})
+            is_white = white.get("username", "").lower() == username.lower()
+            player_result = white.get("result" if is_white else black.get("result", ""))
+            opponent_username = black.get("username" if is_white else white.get("username", ""))
+            player_rating = white.get("rating" if is_white else black.get("rating", 0))
+            opponent_rating = black.get("rating" if is_white else white.get("rating", 0))
+
+        time_class = game.get("time_class", "")
+        game_url = game.get("url", "")
+
+        # Extract opening info
+        eco = game.get("eco", "")
+        opening_name = "Unknown"
+        if eco:
+            opening_name = eco.split("/openings/")[-1].replace("-", " ") if "/openings/" in eco else "Unknown"
+
+        # Extract move info from PGN
+        pgn = game.get("pgn", "")
+        move_count = self._extract_move_count(pgn)
+
+        # Determine result type
+        is_win = player_result == "win"
+        is_draw = "draw" in player_result or player_result == "stalemate"
+        is_loss = not is_win and not is_draw
+
+        result_text = "Won" if is_win else "Drew" if is_draw else f"Lost by {player_result}"
+
+        prompt = f"""You are a chess coach analyzing a specific game for your student "{username}". Provide detailed, move-by-move insights to help them improve.
+
+GAME DETAILS:
+- Playing as: {'White' if is_white else 'Black'}
+- Your Rating: {player_rating}
+- Opponent: {opponent_username} ({opponent_rating})
+- Time Control: {time_class.capitalize()}
+- Opening: {opening_name}
+- Total Moves: {move_count}
+- Result: {result_text}
+- Game URL: {game_url}
+
+PGN (Full Game):
+{pgn}
+
+As a chess coach, analyze this specific game and provide:
+
+**🎯 THE CRITICAL MOMENT**
+Identify the single most important moment in this game - the key mistake, missed opportunity, or critical decision. Reference the specific move number and position. Explain:
+1. What happened at this moment
+2. Why this was the turning point
+3. What you should have done instead
+4. How to recognize similar positions in future games
+
+**Move-by-Move Breakdown**
+Provide 3-5 specific moves where you could have played better. For each:
+- Move number and what was played
+- What went wrong or what was missed
+- The better move(s) and why
+- The tactical or strategic principle involved
+
+**Opening Analysis**
+- How did you handle the opening ({opening_name})?
+- Any mistakes in opening theory or move order?
+- Specific suggestions for studying this opening
+
+**Pattern Recognition**
+What tactical or strategic patterns appeared in this game that you should study more?
+
+**Action Items for This Game**
+Give 2-3 concrete things to practice based on THIS specific game.
+
+Be direct and specific. Reference exact move numbers. Make this feel like a one-on-one coaching session focused entirely on this game."""
+
+        try:
+            response = self.client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {
+                        "role": "system",
+                        "content": "You are a chess coach doing a post-game analysis session with your student. Review the game move-by-move and provide specific, actionable feedback. Be encouraging but honest about mistakes. Focus on teaching moments and patterns they can learn from this specific game."
+                    },
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ],
+                temperature=0.7,
+                max_tokens=2000
+            )
+
+            return response.choices[0].message.content
+
+        except Exception as e:
+            logger.error(f"Error analyzing single game: {e}")
+            raise Exception(f"Failed to analyze game: {str(e)}")
+
     def _extract_move_count(self, pgn: str) -> int:
         """Extract the total number of moves from PGN"""
         if not pgn:

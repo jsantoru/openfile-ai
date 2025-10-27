@@ -1,6 +1,6 @@
 import './GameCard.css'
 
-function GameCard({ game, username, gameNumber, onGameClick }) {
+function GameCard({ game, username, gameNumber, onGameClick, onAnalyzeClick }) {
   const isWhite = game.white_username.toLowerCase() === username.toLowerCase()
   const playerColor = isWhite ? 'white' : 'black'
   const opponentColor = isWhite ? 'black' : 'white'
@@ -65,9 +65,19 @@ function GameCard({ game, username, gameNumber, onGameClick }) {
   const opening = parseOpening(game.eco)
 
   const handleClick = (e) => {
-    e.preventDefault()
+    // Don't open game if clicking the analyze button
+    if (e.target.closest('.game-analyze-button')) {
+      return
+    }
     if (onGameClick) {
       onGameClick(game.url)
+    }
+  }
+
+  const handleAnalyzeClick = (e) => {
+    e.stopPropagation()
+    if (onAnalyzeClick) {
+      onAnalyzeClick(game, gameNumber)
     }
   }
 
@@ -76,13 +86,20 @@ function GameCard({ game, username, gameNumber, onGameClick }) {
       onClick={handleClick}
       className="game-card"
     >
-      {gameNumber && (
-        <div className="game-number">
-          Game #{gameNumber}
+      <div className="game-card-header">
+        <div className={`result-badge ${resultClass}`}>
+          {isWin ? 'Win' : isDraw ? 'Draw' : 'Loss'}
         </div>
-      )}
-      <div className={`result-badge ${resultClass}`}>
-        {isWin ? 'Win' : isDraw ? 'Draw' : 'Loss'}
+        <div className="header-right">
+          <button className="game-analyze-button" onClick={handleAnalyzeClick} title="Analyze this game with AI">
+            🤖 Analyze
+          </button>
+          {gameNumber && (
+            <div className="game-number">
+              Game #{gameNumber}
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="players-section">

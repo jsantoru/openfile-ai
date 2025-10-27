@@ -121,6 +121,37 @@ async def analyze_games(request: AnalysisRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+class SingleGameAnalysisRequest(BaseModel):
+    username: str
+    game: Dict[str, Any]
+
+
+@app.post("/api/analyze-game")
+async def analyze_single_game(request: SingleGameAnalysisRequest):
+    """
+    Analyze a single game using OpenAI to provide detailed coaching feedback.
+
+    Args:
+        request: Contains username and single game data
+
+    Returns:
+        Analysis text with move-by-move insights
+    """
+    if not openai_service:
+        raise HTTPException(
+            status_code=503,
+            detail="OpenAI service not available. Please set OPENAI_API_KEY environment variable."
+        )
+
+    try:
+        logger.info(f"Analyzing single game for {request.username}")
+        analysis = openai_service.analyze_single_game(request.game, request.username)
+        return {"analysis": analysis}
+    except Exception as e:
+        logger.error(f"Error analyzing game: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

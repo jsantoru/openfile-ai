@@ -1,0 +1,225 @@
+.single-game-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  animation: fadeIn 0.2s ease;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 222, 222, 0.5) rgba(255, 255, 255, 0.1);
+}
+
+.single-game-overlay::-webkit-scrollbar {
+  width: 8px;
+}
+
+.single-game-overlay::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+}
+
+.single-game-overlay::-webkit-scrollbar-thumb {
+  background: rgba(0, 222, 222, 0.5);
+  border-radius: 0.5rem;
+}
+
+.single-game-overlay::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 222, 222, 0.7);
+}
+
+.single-game-container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  max-height: 90vh;
+  background: rgb(15, 23, 42);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(0, 222, 222, 0.5);
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 222, 222, 0.5) rgba(255, 255, 255, 0.1);
+}
+
+.single-game-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.single-game-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+}
+
+.single-game-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 222, 222, 0.5);
+  border-radius: 0.5rem;
+}
+
+.single-game-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 222, 222, 0.7);
+}
+
+.single-game-close {
+  position: sticky;
+  top: 1rem;
+  right: 1rem;
+  float: right;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: rgb(0, 222, 222);
+  color: rgb(15, 23, 42);
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 2001;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem 1rem 0 0;
+}
+
+.single-game-close:hover {
+  background: rgb(0, 255, 255);
+  transform: scale(1.1);
+}
+
+.single-game-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  gap: 1rem;
+}
+
+.single-game-loading p {
+  color: white;
+  font-size: 1.125rem;
+}
+
+.single-game-subtext {
+  color: rgb(156, 163, 175);
+  font-size: 0.875rem;
+}
+
+.single-game-header-section {
+  text-align: center;
+  padding: 2rem 2rem 1rem;
+  border-bottom: 2px solid rgba(0, 222, 222, 0.3);
+  clear: both;
+}
+
+.single-game-title {
+  color: rgb(0, 222, 222);
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.single-game-subtitle {
+  color: rgb(156, 163, 175);
+  font-size: 1rem;
+}
+
+.single-game-content {
+  padding: 2rem;
+  color: rgb(209, 213, 219);
+  line-height: 1.7;
+}
+
+.single-game-header {
+  color: rgb(0, 222, 222);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.single-game-header:first-child {
+  margin-top: 0;
+}
+
+.single-game-paragraph {
+  margin-bottom: 1rem;
+  color: rgb(209, 213, 219);
+}
+
+.single-game-list {
+  margin: 1rem 0 1.5rem 1.5rem;
+  padding-left: 0;
+}
+
+.single-game-list li {
+  margin-bottom: 0.75rem;
+  padding-left: 0.5rem;
+  color: rgb(209, 213, 219);
+  line-height: 1.6;
+}
+
+.single-game-list li::marker {
+  color: rgb(0, 222, 222);
+}
+
+.single-game-list li strong,
+.single-game-paragraph strong {
+  color: rgb(0, 222, 222);
+  font-weight: 600;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  height: 2rem;
+  width: 2rem;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.spinner-circle {
+  opacity: 0.25;
+  stroke: rgb(0, 222, 222);
+}
+
+.spinner-path {
+  opacity: 0.75;
+  fill: rgb(0, 222, 222);
+}

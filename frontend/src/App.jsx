@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import GameHistory from './components/GameHistory'
 import GameAnalysis from './components/GameAnalysis'
+import SingleGameAnalysis from './components/SingleGameAnalysis'
 import './App.css'
 
 function App() {
@@ -12,6 +13,9 @@ function App() {
   const [loadingGames, setLoadingGames] = useState(false)
   const [analysis, setAnalysis] = useState(null)
   const [loadingAnalysis, setLoadingAnalysis] = useState(false)
+  const [singleGameAnalysis, setSingleGameAnalysis] = useState(null)
+  const [loadingSingleGame, setLoadingSingleGame] = useState(false)
+  const [analyzingGameNumber, setAnalyzingGameNumber] = useState(null)
   const [error, setError] = useState(null)
 
   const fetchArchives = async () => {
@@ -127,6 +131,45 @@ function App() {
     window.open(url, '_blank', 'noopener,noreferrer')
   }
 
+  const analyzeSingleGame = async (game, gameNumber) => {
+    setLoadingSingleGame(true)
+    setAnalyzingGameNumber(gameNumber)
+    setSingleGameAnalysis(null)
+
+    try {
+      const response = await fetch('http://localhost:8000/api/analyze-game', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username,
+          game: game
+        })
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.detail || `Failed to analyze game: ${response.statusText}`)
+      }
+
+      const data = await response.json()
+      setSingleGameAnalysis(data.analysis)
+    } catch (err) {
+      setError(err.message || 'Failed to analyze game')
+      console.error('Error analyzing game:', err)
+      setLoadingSingleGame(false)
+      setAnalyzingGameNumber(null)
+    } finally {
+      setLoadingSingleGame(false)
+    }
+  }
+
+  const closeSingleGameAnalysis = () => {
+    setSingleGameAnalysis(null)
+    setAnalyzingGameNumber(null)
+  }
+
   return (
     <div className="app-container">
       <div className="content-wrapper">
@@ -240,10 +283,17 @@ function App() {
 
             <GameAnalysis analysis={analysis} loading={loadingAnalysis} onGameClick={openGameViewer} />
 
-            <GameHistory data={games} onGameClick={openGameViewer} />
+            <GameHistory data={games} onGameClick={openGameViewer} onAnalyzeClick={analyzeSingleGame} />
           </>
         )}
       </div>
+
+      <SingleGameAnalysis
+        analysis={singleGameAnalysis}
+        loading={loadingSingleGame}
+        gameNumber={analyzingGameNumber}
+        onClose={closeSingleGameAnalysis}
+      />
     </div>
   )
 }

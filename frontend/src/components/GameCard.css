@@ -17,9 +17,6 @@
 }
 
 .game-number {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
   background: rgba(0, 222, 222, 0.2);
   color: rgb(0, 222, 222);
   font-size: 0.75rem;
@@ -27,11 +24,27 @@
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
   border: 1px solid rgba(0, 222, 222, 0.4);
+  white-space: nowrap;
+}
+
+.game-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  gap: 0.5rem;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .result-badge {
   display: inline-block;
   padding: 0.25rem 0.75rem;
+  flex-shrink: 0;
   border-radius: 9999px;
   font-size: 0.875rem;
   font-weight: 600;
@@ -55,6 +68,25 @@
   background: rgba(239, 68, 68, 0.2);
   border-color: rgba(239, 68, 68, 0.5);
   color: rgb(252, 165, 165);
+}
+
+.game-analyze-button {
+  padding: 0.25rem 0.75rem;
+  background: rgba(0, 222, 222, 0.1);
+  border: 1px solid rgba(0, 222, 222, 0.3);
+  border-radius: 0.25rem;
+  color: rgb(0, 222, 222);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.game-analyze-button:hover {
+  background: rgba(0, 222, 222, 0.2);
+  border-color: rgb(0, 222, 222);
+  transform: translateY(-1px);
 }
 
 .players-section {

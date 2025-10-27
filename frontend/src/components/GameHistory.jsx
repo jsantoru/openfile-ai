@@ -2,7 +2,7 @@ import { useState } from 'react'
 import GameCard from './GameCard'
 import './GameHistory.css'
 
-function GameHistory({ data, onGameClick }) {
+function GameHistory({ data, onGameClick, onAnalyzeClick }) {
   const [filter, setFilter] = useState('all')
 
   if (!data || !data.games || data.games.length === 0) {
@@ -59,7 +59,14 @@ function GameHistory({ data, onGameClick }) {
 
       <div className="games-grid">
         {filteredGames.map((game, index) => (
-          <GameCard key={index} game={game} username={data.username} gameNumber={index + 1} onGameClick={onGameClick} />
+          <GameCard
+            key={index}
+            game={game}
+            username={data.username}
+            gameNumber={index + 1}
+            onGameClick={onGameClick}
+            onAnalyzeClick={onAnalyzeClick}
+          />
         ))}
       </div>
     </div>
