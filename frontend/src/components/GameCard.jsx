@@ -1,6 +1,6 @@
 import './GameCard.css'
 
-function GameCard({ game, username, gameNumber }) {
+function GameCard({ game, username, gameNumber, onGameClick }) {
   const isWhite = game.white_username.toLowerCase() === username.toLowerCase()
   const playerColor = isWhite ? 'white' : 'black'
   const opponentColor = isWhite ? 'black' : 'white'
@@ -64,11 +64,16 @@ function GameCard({ game, username, gameNumber }) {
 
   const opening = parseOpening(game.eco)
 
+  const handleClick = (e) => {
+    e.preventDefault()
+    if (onGameClick) {
+      onGameClick(game.url)
+    }
+  }
+
   return (
-    <a
-      href={game.url}
-      target="_blank"
-      rel="noopener noreferrer"
+    <div
+      onClick={handleClick}
       className="game-card"
     >
       {gameNumber && (
@@ -119,7 +124,7 @@ function GameCard({ game, username, gameNumber }) {
           </div>
         )}
       </div>
-    </a>
+    </div>
   )
 }
 

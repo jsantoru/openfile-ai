@@ -1,6 +1,6 @@
 import './GameAnalysis.css'
 
-function GameAnalysis({ analysis, loading }) {
+function GameAnalysis({ analysis, loading, onGameClick }) {
   if (loading) {
     return (
       <div className="analysis-container">
@@ -50,15 +50,21 @@ function GameAnalysis({ analysis, loading }) {
       // Check if it's a link or bold
       if (match[1] && match[2]) {
         // It's a link [text](url)
+        const linkUrl = match[2]
+        const linkText = match[1]
         parts.push(
           <a
             key={match.index}
-            href={match[2]}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={linkUrl}
+            onClick={(e) => {
+              e.preventDefault()
+              if (onGameClick) {
+                onGameClick(linkUrl)
+              }
+            }}
             className="game-link"
           >
-            {match[1]}
+            {linkText}
           </a>
         )
       } else if (match[3]) {

@@ -122,6 +122,11 @@ function App() {
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' })
   }
 
+  const openGameViewer = (url) => {
+    // Chess.com doesn't allow iframe embedding, so open in new tab
+    window.open(url, '_blank', 'noopener,noreferrer')
+  }
+
   return (
     <div className="app-container">
       <div className="content-wrapper">
@@ -233,9 +238,9 @@ function App() {
               </button>
             </div>
 
-            <GameAnalysis analysis={analysis} loading={loadingAnalysis} />
+            <GameAnalysis analysis={analysis} loading={loadingAnalysis} onGameClick={openGameViewer} />
 
-            <GameHistory data={games} />
+            <GameHistory data={games} onGameClick={openGameViewer} />
           </>
         )}
       </div>
