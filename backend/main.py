@@ -26,32 +26,6 @@ async def root():
     return {"message": "Chess.com Game Analyzer API", "status": "running"}
 
 
-@app.post("/api/games/{username}", response_model=GameHistoryResponse)
-async def get_user_games(username: str, limit_months: int = 12):
-    """
-    Fetch game history for a Chess.com user.
-
-    Args:
-        username: Chess.com username
-        limit_months: Number of recent months to fetch (default: 12)
-
-    Returns:
-        GameHistoryResponse with games and metadata
-    """
-    try:
-        logger.info(f"Fetching games for user: {username}")
-        games = await chess_service.fetch_user_games(username, limit_months)
-
-        return GameHistoryResponse(
-            username=username,
-            total_games=len(games),
-            games=games
-        )
-    except Exception as e:
-        logger.error(f"Error fetching games for {username}: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-
 @app.get("/api/archives/{username}")
 async def get_user_archives(username: str):
     """Get list of available game archives for a user."""
@@ -60,6 +34,43 @@ async def get_user_archives(username: str):
         return {"username": username, "archives": archives}
     except Exception as e:
         logger.error(f"Error fetching archives for {username}: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/games/{username}/{year}/{month}", response_model=GameHistoryResponse)
+async def get_month_games(username: str, year: int, month: int):
+    """
+    Fetch games for a specific month.
+
+    Args:
+        username: Chess.com username
+        year: Year (e.g., 2025)
+        month: Month (1-12)
+
+    Returns:
+        GameHistoryResponse with games and metadata
+    """
+    try:
+        logger.info(f"Fetching games for {username} - {year}/{month}")
+        archive_url = f"https://api.chess.com/pub/player/{username}/games/{year}/{month:02d}"
+        games_data = await chess_service.fetch_month_games(archive_url)
+
+        games = []
+        for game_data in games_data:
+            try:
+                game = chess_service._parse_game(game_data, username)
+                games.append(game)
+            except Exception as e:
+                logger.warning(f"Failed to parse game: {e}")
+                continue
+
+        return GameHistoryResponse(
+            username=username,
+            total_games=len(games),
+            games=games
+        )
+    except Exception as e:
+        logger.error(f"Error fetching games for {username} {year}/{month}: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

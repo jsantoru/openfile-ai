@@ -1,3 +1,5 @@
+import './GameCard.css'
+
 function GameCard({ game, username }) {
   const isWhite = game.white_username.toLowerCase() === username.toLowerCase()
   const playerColor = isWhite ? 'white' : 'black'
@@ -18,57 +20,97 @@ function GameCard({ game, username }) {
     day: 'numeric',
   })
 
-  const resultColor = isWin
-    ? 'bg-green-500/20 border-green-500/50 text-green-300'
-    : isDraw
-    ? 'bg-yellow-500/20 border-yellow-500/50 text-yellow-300'
-    : 'bg-red-500/20 border-red-500/50 text-red-300'
+  const resultClass = isWin ? 'win' : isDraw ? 'draw' : 'loss'
+
+  // Parse opening from URL
+  const parseOpening = (ecoUrl) => {
+    if (!ecoUrl) return null
+
+    // Extract the part after '/openings/'
+    const parts = ecoUrl.split('/openings/')
+    if (parts.length < 2) return null
+
+    // Get the opening name and replace hyphens with spaces
+    const openingText = parts[1].replace(/-/g, ' ')
+
+    // Split into words to identify main opening vs variation
+    const words = openingText.split(' ')
+
+    // Common variation keywords
+    const variationKeywords = ['Variation', 'Defense', 'Attack', 'Gambit', 'System', 'Line', 'Accepted', 'Declined']
+
+    // Find where the variation starts
+    let variationStartIndex = -1
+    for (let i = 0; i < words.length; i++) {
+      if (variationKeywords.includes(words[i])) {
+        // Find the start of this section (look backwards for start)
+        variationStartIndex = i
+        // Look backwards to find where this phrase starts
+        while (variationStartIndex > 0 && !variationKeywords.includes(words[variationStartIndex - 1])) {
+          variationStartIndex--
+        }
+        break
+      }
+    }
+
+    if (variationStartIndex > 0) {
+      const mainOpening = words.slice(0, variationStartIndex).join(' ')
+      const variation = words.slice(variationStartIndex).join(' ')
+      return { main: mainOpening, variation: variation }
+    }
+
+    return { main: openingText, variation: null }
+  }
+
+  const opening = parseOpening(game.eco)
 
   return (
     <a
       href={game.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="block bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20 hover:border-purple-500/50 transition-all hover:transform hover:scale-105 cursor-pointer"
+      className="game-card"
     >
-      {/* Result Badge */}
-      <div className={`inline-block px-3 py-1 rounded-full text-sm font-semibold mb-4 border ${resultColor}`}>
+      <div className={`result-badge ${resultClass}`}>
         {isWin ? 'Win' : isDraw ? 'Draw' : 'Loss'}
       </div>
 
-      {/* Players */}
-      <div className="space-y-3 mb-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className={`w-4 h-4 rounded-full ${isWhite ? 'bg-white' : 'bg-gray-800 border-2 border-white'}`} />
-            <span className="text-white font-semibold truncate">{username}</span>
+      <div className="players-section">
+        <div className="player-row">
+          <div className="player-info">
+            <div className={`color-indicator ${isWhite ? 'white' : 'black'}`} />
+            <span className="username">{username}</span>
           </div>
-          <span className="text-gray-300 font-mono">{playerRating}</span>
+          <span className="rating">{playerRating}</span>
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className={`w-4 h-4 rounded-full ${!isWhite ? 'bg-white' : 'bg-gray-800 border-2 border-white'}`} />
-            <span className="text-gray-300 truncate">{opponentUsername}</span>
+        <div className="player-row">
+          <div className="player-info">
+            <div className={`color-indicator ${!isWhite ? 'white' : 'black'}`} />
+            <span className="username opponent">{opponentUsername}</span>
           </div>
-          <span className="text-gray-400 font-mono">{opponentRating}</span>
+          <span className="rating opponent">{opponentRating}</span>
         </div>
       </div>
 
-      {/* Game Info */}
-      <div className="border-t border-white/10 pt-4 space-y-2">
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-400">Time Control</span>
-          <span className="text-gray-300 capitalize">{game.time_class}</span>
+      <div className="game-info">
+        <div className="info-row">
+          <span className="info-label">Time Control</span>
+          <span className="info-value">{game.time_class}</span>
         </div>
-        <div className="flex justify-between text-sm">
-          <span className="text-gray-400">Date</span>
-          <span className="text-gray-300">{date}</span>
+        <div className="info-row">
+          <span className="info-label">Date</span>
+          <span className="info-value">{date}</span>
         </div>
-        {game.eco && (
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-400">Opening</span>
-            <span className="text-gray-300 font-mono">{game.eco}</span>
+        {opening && (
+          <div className="info-row opening-row">
+            <span className="info-label">Opening</span>
+            <div className="opening-info">
+              <span className="opening-main">{opening.main}</span>
+              {opening.variation && (
+                <span className="opening-variation">{opening.variation}</span>
+              )}
+            </div>
           </div>
         )}
       </div>

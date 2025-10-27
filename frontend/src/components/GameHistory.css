@@ -1,0 +1,100 @@
+.game-history-container {
+  max-width: 80rem;
+  margin: 0 auto;
+}
+
+.stats-header {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-label {
+  color: rgb(156, 163, 175);
+  font-size: 0.875rem;
+}
+
+.stat-value {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.filter-button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+  border: none;
+  cursor: pointer;
+  text-transform: capitalize;
+}
+
+.filter-button.active {
+  background: rgb(0, 222, 222);
+  color: rgb(15, 23, 42);
+  font-weight: 600;
+}
+
+.filter-button.inactive {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgb(209, 213, 219);
+}
+
+.filter-button.inactive:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .games-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .games-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.no-games {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.no-games-text {
+  color: rgb(156, 163, 175);
+  font-size: 1.125rem;
+}

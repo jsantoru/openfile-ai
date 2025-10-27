@@ -1,1 +1,191 @@
-/* Additional custom styles if needed */
+.app-container {
+  min-height: 100vh;
+  background: rgb(15, 23, 42);
+}
+
+.content-wrapper {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 3rem 1rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  color: rgb(209, 213, 219);
+  font-size: 1.125rem;
+}
+
+.search-form-container {
+  max-width: 42rem;
+  margin: 0 auto 3rem;
+}
+
+.search-form {
+  display: flex;
+  gap: 1rem;
+}
+
+.search-input {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  font-size: 1.125rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  backdrop-filter: blur(10px);
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: rgb(156, 163, 175);
+}
+
+.search-input:focus {
+  outline: 2px solid rgb(0, 222, 222);
+  border-color: transparent;
+  box-shadow: 0 0 0 3px rgba(0, 222, 222, 0.5);
+}
+
+.submit-button {
+  padding: 1rem 2rem;
+  background: rgb(0, 222, 222);
+  color: rgb(15, 23, 42);
+  font-weight: 600;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  outline: none;
+}
+
+.submit-button:hover:not(:disabled) {
+  background: rgb(0, 190, 190);
+}
+
+.submit-button:disabled {
+  background: rgb(75, 85, 99);
+  cursor: not-allowed;
+}
+
+.submit-button:focus {
+  outline: 2px solid rgb(0, 222, 222);
+  outline-offset: 2px;
+}
+
+.loading-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner-circle {
+  opacity: 0.25;
+}
+
+.spinner-path {
+  opacity: 0.75;
+}
+
+.error-container {
+  max-width: 42rem;
+  margin: 0 auto 2rem;
+  padding: 1rem;
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  border-radius: 0.5rem;
+}
+
+.error-text {
+  color: rgb(252, 165, 165);
+  text-align: center;
+}
+
+.archives-container {
+  max-width: 80rem;
+  margin: 0 auto 3rem;
+}
+
+.archives-title {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.archives-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.archive-button {
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  color: rgb(209, 213, 219);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.archive-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(0, 222, 222, 0.5);
+  transform: translateY(-2px);
+}
+
+.archive-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.archive-button.selected {
+  background: rgb(0, 222, 222);
+  border-color: rgb(0, 222, 222);
+  color: rgb(15, 23, 42);
+  font-weight: 600;
+}
+
+.loading-games {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  gap: 1rem;
+}
+
+.loading-games p {
+  color: white;
+  font-size: 1.125rem;
+}
